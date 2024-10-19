@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/subscription.css') }}"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="subscription-container">
+        <h1>Choose Your Subscription Plan</h1>
+        <div class="plans-section">
+            <!-- Monthly Plan -->
+            <div class="plan-card">
+                <h2>Monthly Plan</h2>
+                <p class="price">Rs 2000/month</p>
+                <ul>
+                    <li>Access to all workout plans</li>
+                    <li>Access to all diet plans</li>
+                    <li>Video call with trainers</li>
+                    <li>AI Chatbot support</li>
+                </ul>
+                <a href="{{ url_for('premium') }}?plan=monthly&price=9.99" class="btn">Get Subscription</a>
+            </div>
+
+            <!-- Quarterly Plan -->
+            <div class="plan-card">
+                <h2>Quarterly Plan</h2>
+                <p class="price">Rs 4500/quarter</p>
+                <ul>
+                    <li>Access to all workout plans</li>
+                    <li>Access to all diet plans</li>
+                    <li>Video call with trainers</li>
+                    <li>AI Chatbot support</li>
+                    <li>Exclusive fitness challenges</li>
+                </ul>
+                <a href="{{ url_for('premium') }}?plan=quarterly&price=24.99" class="btn">Get Subscription</a>
+            </div>
+
+            <!-- Annual Plan -->
+            <div class="plan-card">
+                <h2>Annual Plan</h2>
+                <p class="price">Rs 7000/year</p>
+                <ul>
+                    <li>Access to all workout plans</li>
+                    <li>Access to all diet plans</li>
+                    <li>Video call with trainers</li>
+                    <li>AI Chatbot support</li>
+                    <li>Exclusive fitness challenges</li>
+                    <li>1-on-1 personal trainer sessions</li>
+                </ul>
+                <a href="{{ url_for('premium') }}?plan=annual&price=79.99" class="btn">Get Subscription</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

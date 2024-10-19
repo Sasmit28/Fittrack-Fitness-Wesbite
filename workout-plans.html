@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Plans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/workout-plans.css') }}"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Workout Plans</h1>
+
+    <h2>Free Plans</h2>
+    <div class="plans">
+        <div class="plan">
+            <img src="free-workout1.jpg" alt="Free Workout 1">
+            <h3>Basic Workout Plan</h3>
+            <p>Details of the basic workout plan, including exercises and duration.</p>
+        </div>
+        <div class="plan">
+            <img src="free-workout2.jpg" alt="Free Workout 2">
+            <h3>Beginner's Yoga</h3>
+            <p>A gentle introduction to yoga, focusing on flexibility and relaxation.</p>
+        </div>
+        <div class="plan">
+            <img src="free-workout3.jpg" alt="Free Workout 3">
+            <h3>Cardio Blast</h3>
+            <p>High-intensity cardio workouts to boost your heart health.</p>
+        </div>
+        <div class="plan">
+            <img src="free-workout4.jpg" alt="Free Workout 4">
+            <h3>Strength Training Basics</h3>
+            <p>Fundamentals of strength training for beginners.</p>
+        </div>
+    </div>
+
+    <h2>Paid Plans</h2>
+    <div class="plans">
+        <div class="plan">
+            <img src="paid-workout1.jpg" alt="Paid Workout 1">
+            <h3>Advanced Workout Plan</h3>
+            <p>In-depth workouts focusing on muscle building and strength.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="paid-workout2.jpg" alt="Paid Workout 2">
+            <h3>Personalized Training</h3>
+            <p>Customized training plans based on individual fitness goals.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="paid-workout3.jpg" alt="Paid Workout 3">
+            <h3>Nutrition and Workout</h3>
+            <p>Combined plans focusing on diet and exercise for optimal results.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="paid-workout4.jpg" alt="Paid Workout 4">
+            <h3>HIIT Training Program</h3>
+            <p>High-Intensity Interval Training for maximum calorie burn.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+    </div>
+</body>
+</html>
+

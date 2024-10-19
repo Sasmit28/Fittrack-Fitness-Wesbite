@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Injury & Rehabilitation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/injury-rehabilitation.css') }}"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('home') }}" class="back-btn">&#8592; Back to Home</a>
+    </header>
+
+    <main>
+        <h1>Injury & Rehabilitation</h1>
+        <div class="cards-container">
+            <!-- Injury Reporting and Treatment Cards -->
+            <div class="card" id="report-injury-card">
+                <h2>Report Injury</h2>
+                <p>Submit details about the injury you’ve encountered and get assistance.</p>
+                <!-- Report button to open new report-injury.html page -->
+                <a href="{{ url_for('report_injury') }}" class="button">Report Injury</a>
+
+
+            </div>
+
+            <div class="card" id="treat-injury-card">
+                <h2>Treat Injury</h2>
+                <p>Find rehabilitation processes and exercises tailored to your injury.</p>
+                <!-- Treat button to open new treat-injury.html page -->
+                <a href="{{ url_for('treat_injury') }}" class="button">Treat Injury</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/injury-rehabilitation.js') }}"></script> <!-- Link to the JS file -->
+</body>
+</html>

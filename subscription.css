@@ -1,0 +1,84 @@
+/* General Body Styles */
+body {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text color */
+    font-family: Arial, sans-serif; /* Font family */
+    margin: 0;
+    padding: 0;
+}
+
+/* Subscription Container */
+.subscription-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: #ff4c68; /* Accent color */
+    margin-bottom: 40px;
+}
+
+/* Plans Section */
+.plans-section {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/* Plan Card */
+.plan-card {
+    background-color: #2e2e2e; /* Darker background for cards */
+    padding: 30px;
+    margin: 20px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.plan-card h2 {
+    font-size: 24px;
+    color: #ff4c68;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 22px;
+    color: #f1c40f; /* Price highlight color */
+    margin-bottom: 20px;
+}
+
+.plan-card ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.plan-card ul li {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    background-color: #ff4c68;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e84356;
+}

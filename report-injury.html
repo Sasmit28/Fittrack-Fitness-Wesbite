@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Injury</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, textarea {
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #error, #debug {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ff0000;
+            border-radius: 4px;
+            background-color: #ffeeee;
+            color: #ff0000;
+        }
+        #debug {
+            border-color: #0000ff;
+            background-color: #eeeeff;
+            color: #0000ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Report Injury</h1>
+    <form id="injuryReportForm">
+        <label for="injury_name">Injury Name:</label>
+        <input type="text" id="injury_name" name="injury_name" required>
+        
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+        
+        <button type="submit">Submit</button>
+    </form>
+    <div id="error" style="display: none;"></div>
+    <div id="debug" style="display: none;"></div>
+
+    <script>
+        document.getElementById('injuryReportForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const injuryData = {
+                injury_name: document.getElementById('injury_name').value,
+                description: document.getElementById('description').value,
+            };
+
+            const errorElement = document.getElementById('error');
+            const debugElement = document.getElementById('debug');
+
+            errorElement.style.display = 'none';
+            debugElement.style.display = 'none';
+
+            try {
+                localStorage.setItem('injury_data', JSON.stringify(injuryData));
+                console.log('Data saved to localStorage:', localStorage.getItem('injury_data'));
+                debugElement.textContent = `Data saved to localStorage: ${JSON.stringify(injuryData)}`;
+                debugElement.style.display = 'block';
+                
+                // Redirect to treat-injury.html
+                window.location.href = "{{ url_for('treat_injury') }}";
+            } catch (error) {
+                console.error('Error:', error);
+                errorElement.textContent = `Error occurred while saving injury data: ${error.message}`;
+                errorElement.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

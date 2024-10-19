@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="dropdown">
+            <button class="dropdown-btn">&#9776; Menu</button>
+            <div class="dropdown-content">
+                <a href="#">Register</a>
+                <a href="{{ url_for('plans') }}">Plans</a>
+                <a href="{{ url_for('subscription') }}">Subscription</a> 
+                <a href="#" onclick="highlightFeatures()">What's New</a>
+                <a href="#">Blog</a>
+                <a href="#">Support</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="{{ url_for('injury_rehabilitation') }}" class="header-btn special" id="rehab-btn">Injury & Rehabilitation</a>
+
+            <a href="#" class="header-btn" id="video-call-btn">Video Call</a>
+            <a href="#" class="header-btn" id="rewards-btn">Rewards</a>
+            <a href="#" class="icon-btn">&#128276;</a>
+            <a href="#" class="icon-btn">&#128100;</a>
+        </div>
+    </header>
+
+    <script>
+        function highlightFeatures() {
+            const rehabBtn = document.getElementById('rehab-btn');
+            const aiChatbotBtn = document.getElementById('ai-chatbot-btn');
+            const videoCallBtn = document.getElementById('video-call-btn');
+            const rewardsBtn = document.getElementById('rewards-btn');
+
+            rehabBtn.classList.add('highlight');
+            aiChatbotBtn.classList.add('highlight');
+            videoCallBtn.classList.add('highlight');
+            rewardsBtn.classList.add('highlight');
+
+            setTimeout(() => {
+                rehabBtn.classList.remove('highlight');
+                aiChatbotBtn.classList.remove('highlight');
+                videoCallBtn.classList.remove('highlight');
+                rewardsBtn.classList.remove('highlight');
+            }, 3000);
+        }
+    </script>
+
+    <!-- Main Home Screen Section -->
+    <section class="main-home">
+        <div class="dashboard">
+            <div class="card">
+                <h2>Calorie Tracker</h2>
+                <form id="calorie-form">
+                    <label for="food-choice">Select Food Item:</label>
+                    <select id="food-choice" name="food-choice" required>
+                        <option value="" disabled selected>Select a food</option>
+                    </select>
+
+                    <p>Calories Consumed: <span id="food-calories">0</span></p>
+                    <p>Protein: <span id="food-protein">0g</span></p>
+                    <p>Carbs: <span id="food-carbs">0g</span></p>
+                    <p>Fats: <span id="food-fats">0g</span></p>
+                    
+                    <button type="submit">Update</button>
+                </form>
+
+                <p>Net Calories: <span id="net-calories">-400</span></p>
+                <div class="progress-bar">
+                    <div class="progress" id="calorie-progress"></div>
+                </div>
+                
+                <div id="food-list"></div>
+                <button id="clear-button">Clear Entries</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const foodData = {
+            "banana": { calories: 105, protein: 1.3, carbs: 27, fats: 0.3 },
+            "apple": { calories: 95, protein: 0.3, carbs: 25, fats: 0.3 },
+            "chicken": { calories: 165, protein: 31, carbs: 0, fats: 3.6 },
+            "rice": { calories: 130, protein: 2.7, carbs: 28, fats: 0.3 },
+            "pizza": { calories: 285, protein: 12, carbs: 36, fats: 10 },
+            "hamburger": { calories: 250, protein: 15, carbs: 20, fats: 12 },
+            "avocado": { calories: 160, protein: 2, carbs: 8.5, fats: 14.7 },
+            "potato": { calories: 130, protein: 3.2, carbs: 30, fats: 0.2 },
+            "bread": { calories: 80, protein: 3, carbs: 15, fats: 1 },
+            "egg": { calories: 70, protein: 6, carbs: 0.6, fats: 5 },
+            "salmon": { calories: 208, protein: 22, carbs: 0, fats: 13 },
+            "milk": { calories: 103, protein: 8, carbs: 12, fats: 2.4 },
+            "pasta": { calories: 200, protein: 7, carbs: 42, fats: 1.2 },
+            "cheese": { calories: 113, protein: 7, carbs: 0.9, fats: 9 },
+            "yogurt": { calories: 150, protein: 12, carbs: 17, fats: 4 },
+            "orange": { calories: 62, protein: 1.2, carbs: 15, fats: 0.2 },
+            "taco": { calories: 210, protein: 11, carbs: 22, fats: 9 },
+            "salad": { calories: 70, protein: 3, carbs: 10, fats: 0.5 }
+        };
+
+        // Populate food select options
+        const select = document.getElementById('food-choice');
+        Object.keys(foodData).forEach(food => {
+            const option = document.createElement('option');
+            option.value = food;
+            option.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+            select.appendChild(option);
+        });
+
+        let totalCalories = 0;
+        let totalProtein = 0;
+        let totalCarbs = 0;
+        let totalFats = 0;
+        let foodList = [];
+
+        document.getElementById('calorie-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const foodChoice = document.getElementById('food-choice').value;
+            if (!foodChoice) return;
+
+            const foodInfo = foodData[foodChoice];
+            if (!foodInfo) return;
+
+            totalCalories += foodInfo.calories;
+            totalProtein += foodInfo.protein;
+            totalCarbs += foodInfo.carbs;
+            totalFats += foodInfo.fats;
+
+            foodList.push(foodChoice);
+            updateFoodList();
+
+            document.getElementById('food-calories').textContent = totalCalories;
+            document.getElementById('food-protein').textContent = `${totalProtein.toFixed(1)}g`;
+            document.getElementById('food-carbs').textContent = `${totalCarbs.toFixed(1)}g`;
+            document.getElementById('food-fats').textContent = `${totalFats.toFixed(1)}g`;
+
+            const netCalories = totalCalories - 400;
+            document.getElementById('net-calories').textContent = netCalories;
+
+            const progressWidth = (totalCalories / 2000) * 100;
+            document.getElementById('calorie-progress').style.width = `${progressWidth}%`;
+        });
+
+        function updateFoodList() {
+            const foodListElement = document.getElementById('food-list');
+            foodListElement.innerHTML = '';
+            foodList.forEach((item, index) => {
+                const foodInfo = foodData[item];
+                foodListElement.innerHTML += `
+                    <p>${index + 1}. ${item} - Calories: ${foodInfo.calories}, Protein: ${foodInfo.protein.toFixed(1)}g, Carbs: ${foodInfo.carbs.toFixed(1)}g, Fats: ${foodInfo.fats.toFixed(1)}g</p>
+                `;
+            });
+        }
+
+        document.getElementById('clear-button').addEventListener('click', function() {
+            totalCalories = 0;
+            totalProtein = 0;
+            totalCarbs = 0;
+            totalFats = 0;
+            foodList = [];
+
+            document.getElementById('food-calories').textContent = '0';
+            document.getElementById('food-protein').textContent = '0g';
+            document.getElementById('food-carbs').textContent = '0g';
+            document.getElementById('food-fats').textContent = '0g';
+            document.getElementById('net-calories').textContent = '-400';
+            document.getElementById('calorie-progress').style.width = '0%';
+            document.getElementById('food-list').innerHTML = '';
+        });
+    </script>
+</body>
+</html>
+
+            <!-- Exercise Logging Section -->
+
+            <div class="card">
+                <h2>Exercise Logging</h2>
+                <form id="exercise-form">
+                    <label for="exercise-type">Exercise Type:</label>
+                    <input type="text" id="exercise-type" name="exercise-type" placeholder="Enter exercise type" required>
+
+                    <label for="exercise-duration">Duration (hours):</label>
+                    <input type="number" id="exercise-duration" name="exercise-duration" placeholder="Enter duration" required>
+
+                    <label for="exercise-goal">Exercise Goal (calories):</label>
+                    <input type="number" id="exercise-goal" name="exercise-goal" placeholder="Enter goal" required>
+
+                    <button type="submit">Log Exercise</button>
+                </form>
+
+                <p>Total Time: <span id="total-time">0h 0m</span></p>
+                <p>Calories Burned: <span id="exercise-calories">0</span></p>
+                <div class="progress-bar">
+                    <div class="progress" id="exercise-progress" style="width: 0%;"></div>
+                </div>
+
+                <div id="exercise-list"></div>
+                <button id="clear-button">Clear Entries</button>
+                <p id="reward">Congratulations! You've achieved your exercise goal!</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Data for exercises
+        const exerciseData = {
+            "Walking": { caloriesPerHour: 400 },
+            "Jogging": { caloriesPerHour: 600 },
+            "Running": { caloriesPerHour: 800 },
+            "Swimming": { caloriesPerHour: 700 },
+            "Cycling": { caloriesPerHour: 500 },
+            "Dancing": { caloriesPerHour: 300 },
+            "Yoga": { caloriesPerHour: 200 },
+            "Weightlifting": { caloriesPerHour: 900 },
+            "Basketball": { caloriesPerHour: 800 },
+            "Football": { caloriesPerHour: 900 },
+            "Tennis": { caloriesPerHour: 600 },
+            "Volleyball": { caloriesPerHour: 500 },
+            "Golf": { caloriesPerHour: 400 },
+            "Hiking": { caloriesPerHour: 700 },
+            "Skiing": { caloriesPerHour: 900 },
+            "Snowboarding": { caloriesPerHour: 800 },
+            "Surfing": { caloriesPerHour: 600 },
+            "Skating": { caloriesPerHour: 500 },
+            "Gymnastics": { caloriesPerHour: 900 },
+            "Martial Arts": { caloriesPerHour: 800 },
+            "Pilates": { caloriesPerHour: 400 },
+            "Rowing": { caloriesPerHour: 700 },
+            "Boxing": { caloriesPerHour: 900 },
+            "Wrestling": { caloriesPerHour: 800 },
+            "Jumping Rope": { caloriesPerHour: 700 },
+            "Horseback Riding": { caloriesPerHour: 500 },
+            "Fencing": { caloriesPerHour: 600 },
+            "Archery": { caloriesPerHour: 400 },
+            "Table Tennis": { caloriesPerHour: 500 },
+            "Badminton": { caloriesPerHour: 600 },
+            "Racquetball": { caloriesPerHour: 700 },
+            "Squash": { caloriesPerHour: 800 },
+            "Handball": { caloriesPerHour: 900 },
+            "Lacrosse": { caloriesPerHour: 800 },
+            "Field Hockey": { caloriesPerHour: 700 },
+            "Rugby": { caloriesPerHour: 900 },
+            "Water Polo": { caloriesPerHour: 800 },
+            "Triathlon": { caloriesPerHour: 900 },
+            "Cross-Country Skiing": { caloriesPerHour: 700 },
+            "Alpine Skiing": { caloriesPerHour: 600 },
+            "Freestyle Skiing": { caloriesPerHour: 500 },
+            "Speed Skating": { caloriesPerHour: 400 },
+            "Figure Skating": { caloriesPerHour: 300 },
+            "Ice Hockey": { caloriesPerHour: 700 },
+            "Curling": { caloriesPerHour: 400 },
+            "Bobsleigh": { caloriesPerHour: 500 },
+            "Luge": { caloriesPerHour: 600 },
+            "Skeleton": { caloriesPerHour: 700 },
+            "Biathlon": { caloriesPerHour: 800 },
+            "Nordic Combined": { caloriesPerHour: 900 },
+            "Ski Jumping": { caloriesPerHour: 700 },
+            "Freestyle Aerials": { caloriesPerHour: 600 },
+            "Moguls": { caloriesPerHour: 500 },
+            "Ski Cross": { caloriesPerHour: 700 },
+            "Snowboard Cross": { caloriesPerHour: 600 },
+            "Halfpipe": { caloriesPerHour: 500 },
+            "Slopestyle": { caloriesPerHour: 600 },
+            "Big Air": { caloriesPerHour: 500 }
+        };
+
+        let totalExerciseTime = 0;
+        let totalCaloriesBurned = 0;
+        let exerciseGoal = 0;
+
+        document.getElementById('exercise-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const exerciseType = document.getElementById('exercise-type').value;
+            const exerciseDuration = parseFloat(document.getElementById('exercise-duration').value);
+            exerciseGoal = parseFloat(document.getElementById('exercise-goal').value);
+
+            if (exerciseData[exerciseType]) {
+                const caloriesBurned = exerciseData[exerciseType].caloriesPerHour * exerciseDuration;
+                totalCaloriesBurned += caloriesBurned;
+                totalExerciseTime += exerciseDuration;
+
+                // Update display
+                document.getElementById('total-time').textContent = `${Math.floor(totalExerciseTime)}h ${Math.round((totalExerciseTime % 1) * 60)}m`;
+                document.getElementById('exercise-calories').textContent = totalCaloriesBurned.toFixed(0);
+
+                // Update progress bar
+                const progressWidth = (totalCaloriesBurned / exerciseGoal) * 100;
+                document.getElementById('exercise-progress').style.width = `${progressWidth}%`;
+
+                // Update exercise list
+                const exerciseListElement = document.getElementById('exercise-list');
+                exerciseListElement.innerHTML += `
+                    <p>${exerciseType} - Duration: ${exerciseDuration}h, Calories Burned: ${caloriesBurned.toFixed(0)}</p>
+                `;
+
+                // Check if goal is achieved
+                if (totalCaloriesBurned >= exerciseGoal) {
+                    document.getElementById('reward').style.display = 'block';
+                } else {
+                    document.getElementById('reward').style.display = 'none';
+                }
+
+                // Clear input
+                document.getElementById('exercise-type').value = '';
+                document.getElementById('exercise-duration').value = '';
+            }
+        });
+
+        document.getElementById('clear-button').addEventListener('click', function() {
+            totalExerciseTime = 0;
+            totalCaloriesBurned = 0;
+            document.getElementById('total-time').textContent = '0h 0m';
+            document.getElementById('exercise-calories').textContent = '0';
+            document.getElementById('exercise-progress').style.width = '0%';
+            document.getElementById('exercise-list').innerHTML = '';
+            document.getElementById('reward').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
+
+            <!-- Water Logging Section -->
+   
+
+            <div class="card">
+                <h2>Water Logging</h2>
+                <form id="water-form">
+                    <label for="water-goal">Water Goal (L):</label>
+                    <select id="water-goal" name="water-goal" required>
+                        <option value="3">3L</option>
+                        <option value="4">4L</option>
+                        <option value="5">5L</option>
+                    </select>
+
+                    <label for="glass-size">Glass Size:</label>
+                    <select id="glass-size" name="glass-size" required>
+                        <option value="100">Small (100ml)</option>
+                        <option value="200" selected>Medium (200ml)</option>
+                        <option value="500">Large (500ml)</option>
+                    </select>
+
+                    <label for="water-consumed">Water Consumed (glasses):</label>
+                    <input type="number" id="water-consumed" name="water-consumed" placeholder="Enter water consumed" required>
+
+                    <button type="submit">Log Water</button>
+                </form>
+
+                <p>Water Consumed: <span id="total-consumed">0L</span></p>
+                <p>Water Goal: <span><span id="water-goal-display">3L</span></span></p>
+                <div class="progress-bar">
+                    <div class="progress" id="water-progress" style="width: 0%;"></div>
+                </div>
+
+                <p id="reward">Congratulations! You've achieved your water goal for the day!</p>
+                <button id="clear-button">Clear Entries</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let totalConsumed = 0;
+        let waterGoal = 3; // Default goal
+
+        document.getElementById('water-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const waterConsumed = parseFloat(document.getElementById('water-consumed').value);
+            const glassSize = parseFloat(document.getElementById('glass-size').value);
+            const selectedGoal = parseFloat(document.getElementById('water-goal').value);
+            waterGoal = selectedGoal;
+
+            document.getElementById('water-goal-display').textContent = waterGoal + 'L';
+
+            const waterInLiters = (waterConsumed * glassSize) / 1000;
+            totalConsumed += waterInLiters;
+
+            // Update display
+            document.getElementById('total-consumed').textContent = totalConsumed.toFixed(1) + 'L';
+
+            // Update progress bar
+            const progressWidth = (totalConsumed / waterGoal) * 100;
+            document.getElementById('water-progress').style.width = `${progressWidth}%`;
+
+            // Check if goal is achieved
+            if (totalConsumed >= waterGoal) {
+                document.getElementById('reward').style.display = 'block';
+            } else {
+                document.getElementById('reward').style.display = 'none';
+            }
+
+            // Clear input
+            document.getElementById('water-consumed').value = '';
+        });
+
+        document.getElementById('clear-button').addEventListener('click', function() {
+            totalConsumed = 0;
+            document.getElementById('total-consumed').textContent = '0L';
+            document.getElementById('water-progress').style.width = '0%';
+            document.getElementById('reward').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
+
+    <hr>
+
+    <script>
+        document.getElementById('calorie-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+    
+            const foodItem = document.getElementById('food-choice').value;
+            const servingSize = 200;
+    
+            fetch('http://127.0.0.1:5500/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ food_item: foodItem, serving_size: servingSize })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('food-calories').innerText = data.calories + ' kcal';
+                    document.getElementById('food-protein').innerText = data.protein + 'g';
+                    document.getElementById('food-carbs').innerText = data.carbs + 'g';
+                    document.getElementById('food-fats').innerText = '34g';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h2>About FitTrack</h2>
+                <p>FitTrack is dedicated to helping you achieve your fitness goals. Track your progress, log your meals and workouts, and stay motivated with our engaging and easy-to-use platform.</p>
+            </div>
+            <div class="footer-section contact">
+                <h2>Contact Us</h2>
+                <p><i class="fas fa-phone-alt"></i> +1 234 567 890</p>
+                <p><i class="fas fa-envelope"></i> support@fittrack.com</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section about-us">
+                <h2>About Us</h2>
+                <p>FitTrack was founded by a team of fitness enthusiasts who wanted to create a platform that makes it easier for people to reach their fitness goals. Our mission is to empower individuals to live healthier lives through technology and innovation.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 FitTrack. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Add FontAwesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

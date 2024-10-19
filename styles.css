@@ -1,0 +1,427 @@
+/* Global Styles */
+body, h1, h2, p, form {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: center;
+    min-height: 100vh;
+    background: url('hero-background.jpg') no-repeat center center/cover;
+    color: #ffffff;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: -1;
+}
+
+.hero-content {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1200px;
+    width: 100%;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: #ff4c68;
+}
+
+.hero-content p {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #dddddd;
+}
+
+.cta-btn {
+    padding: 12px 50px;
+    background-color: #ff4c68;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-btn:hover {
+    background-color: #e43d5a;
+}
+
+/* Footer Section */
+footer {
+    background-color: #1e1e1e;
+    padding: 20px 20px;
+    color: #cccccc;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 10px;
+    min-width: 250px;
+}
+
+.footer-section h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.footer-section p {
+    line-height: 1.6;
+}
+
+.socials a {
+    margin-right: 15px;
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.socials a:hover {
+    color: #ff4c68;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    font-size: 14px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #999999;
+}
+
+/* Login/Sign-Up Page Styles */
+.login-container {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    width: 300px;
+    text-align: center;
+    margin: 100px auto;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #ff4c68;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #cccccc;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    background-color: #2e2e2e;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #ff4c68;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #ff4c68;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+    background-color: #e43d5a;
+}
+
+.login-footer {
+    margin-top: 20px;
+    color: #cccccc;
+}
+
+.login-footer a {
+    color: #ff4c68;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Header Section Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #1e1e1e;
+    border-bottom: 2px solid #333;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dropdown-btn:hover {
+    background-color: #444;
+    transform: scale(1.05);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #444;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* General Button Styling */
+.header-btn {
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #333;
+    margin-right: 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.header-btn:hover {
+    background-color: #444;
+    transform: translateY(-2px);
+}
+
+/* Special styling for "Injury & Rehabilitation" button */
+.header-btn.special {
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #333;
+    margin-right: 15px;
+    border-radius: 4px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-btn.special::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #ff0000, #ff4c4c, #ff6666, #ff3333);
+    background-size: 400%;
+    z-index: -1;
+    animation: animate-border 6s linear infinite;
+}
+
+.header-btn.special:hover::before {
+    background-size: 200%;
+    transform: scale(1.05);
+}
+
+@keyframes animate-border {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Icon Button Styling */
+.icon-btn {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 10px;
+    margin-right: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.icon-btn:hover {
+    background-color: #444;
+    transform: scale(1.1);
+}
+
+/* Highlight Effect */
+.highlight {
+    border: 2px solid #f39c12;
+    box-shadow: 0 0 10px 3px rgba(243, 156, 18, 0.7);
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Main Home Screen Section Styles */
+.main-home {
+    padding: 50px 0;
+    background-color: #1e1e1e;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.card p {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.card span {
+    font-weight: bold;
+}
+
+.card .negative {
+    color: green;
+}
+
+.progress-bar {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 8px;
+    margin-top: 10px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #333;
+    transition: width 0.3s ease;
+}
+
+/* Updated styles for Calorie Tracker Section */
+.card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card select,
+.card input[type="number"],
+.card input[type="text"],
+.card button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.card button {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+    background-color: #555;
+}

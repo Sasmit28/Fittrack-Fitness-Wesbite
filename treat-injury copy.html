@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Injury Treatment Plan</title>
+    <style>
+         :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFD93D;
+            --background-color: #F7FFF7;
+            --text-color: #2C3E50;
+            --error-color: #FF4136;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: var(--secondary-color);
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        .section {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--accent-color);
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        .grade {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.05);
+        }
+        #error, #debug {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease-out;
+        }
+        #error {
+            background-color: var(--error-color);
+            color: #fff;
+        }
+        #debug {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 2.5em;
+            }
+            .section {
+                padding: 20px;
+            }
+        }
+
+        /* New styles for the Get Diet Plan button */
+        .diet-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .get-diet-plan-btn {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .get-diet-plan-btn:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .get-diet-plan-btn:active {
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
+            .diet-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .get-diet-plan-btn {
+                margin-top: 15px;
+                width: 100%;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Injury Treatment Plan</h1>
+    <div id="treatmentPlan">Loading treatment plan...</div>
+    <div id="error" style="display: none;"></div>
+    <div id="debug" style="display: none;"></div>
+
+    <script>
+        // Injury dataset
+        const injuryDataset = [
+        {
+                injury_name: "Sprained Ankle",
+                description: "A ligament injury caused by twisting or rolling the ankle, leading to pain, swelling, and limited mobility.",
+                grade: 2,
+                rehab_steps: ["Rest", "Ice application", "Compression", "Elevation (RICE)", "Strengthening exercises", "Balance training", "Physical therapy"],
+                exercise_images: ["ankle_stretch.jpg", "ankle_balance.jpg", "ankle_strength.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Torn ACL",
+                description: "A knee injury involving the tear of the ACL, often occurring during high-impact sports or sudden stops.",
+                grade: 3,
+                rehab_steps: ["Rest", "Physical therapy", "Knee strengthening exercises", "Range of motion exercises", "Post-surgery rehabilitation (if applicable)", "Functional movement training"],
+                exercise_images: ["knee_strength.jpg", "acl_rehab_exercise.jpg", "balance_board_exercise.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Rotator Cuff Tear",
+                description: "A tear in the muscles or tendons around the shoulder, causing pain and reduced arm movement.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Range of motion exercises", "Shoulder strengthening exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["shoulder_stretch.jpg", "rotator_strength.jpg", "band_pull_exercise.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow caused by overuse, particularly in repetitive arm motions.",
+                grade: 2,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often due to repetitive stress on the bone and muscles from running or jumping.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, typically caused by overstretching during running or jumping.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A brain injury caused by a blow to the head, leading to dizziness, confusion, and sometimes unconsciousness.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, resulting in pain at the back of the heel, often from overuse.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the thick band of tissue on the bottom of the foot, causing heel pain, especially in the morning.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, leading to pain, numbness, and tingling in the hand.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the  wrist, causing pain, numbness, and tingling.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 2,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 2,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 2,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 2,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Hamstring Strain",
+                description: "A strain or tear in the hamstring muscles, often caused by overstretching.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Concussion",
+                description: "A traumatic brain injury resulting from a blow or jolt to the head, affecting brain function.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Achilles Tendonitis",
+                description: "Inflammation of the Achilles tendon, often due to overuse or sudden strain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Carpal Tunnel Syndrome",
+                description: "Compression of the median nerve in the wrist, causing pain, numbness, and tingling.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Fractured Ribs",
+                description: "Breaks or cracks in the bones of the rib cage, usually due to trauma.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Plantar Fasciitis",
+                description: "Inflammation of the tissue on the bottom of the foot, causing heel pain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Whiplash",
+                description: "Neck injury due to forceful, rapid back-and-forth movement, often from car accidents.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Dislocated Shoulder",
+                description: "When the upper arm bone pops out of the shoulder socket.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Patellar Tendonitis",
+                description: "Inflammation of the tendon connecting the kneecap to the shinbone, causing knee pain.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Meniscus Tear",
+                description: "A tear in the cartilage of the knee, often due to twisting or heavy lifting.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Stress Fracture",
+                description: "Small cracks in the bone caused by repetitive force, often from overuse.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Torn Rotator Cuff",
+                description: "A tear in the tendons of the shoulder, causing pain and limiting movement.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Groin Strain",
+                description: "Injury to the muscles of the inner thigh due to overstretching.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Shin Splints",
+                description: "Pain along the shin bone, often caused by repetitive activity on hard surfaces.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Calf stretching exercises", "Strengthening of lower leg muscles", "Gradual return to activity", "Physical therapy"],
+                exercise_images: ["calf_stretch.jpg", "shin_strength.jpg", "leg_balance_exercise.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Herniated Disc",
+                description: "When the soft cushion between the vertebrae pushes out, pressing on nerves.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "ACL Tear",
+                description: "A tear in the anterior cruciate ligament in the knee, leading to instability.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Tennis Elbow",
+                description: "Pain around the outside of the elbow due to overuse, especially in repetitive arm motions.",
+                grade: 3,
+                rehab_steps: ["Rest", "Ice application", "Forearm strengthening exercises", "Eccentric wrist exercises", "Stretching", "Physical therapy"],
+                exercise_images: ["forearm_strength.jpg", "eccentric_wrist.jpg", "elbow_stretch.jpg"],
+                diet_recommendation: "Consult doctor"
+            },
+            {
+                injury_name: "Sprained Wrist",
+                description: "A stretch or tear of the ligaments in the wrist, caused by bending the wrist excessively.",
+                grade: 1,
+                rehab_steps: ["Rest", "Ice application", "Stretching"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "High-protein diet"
+            },
+            {
+                injury_name: "Hip Bursitis",
+                description: "Inflammation of the bursa in the hip, causing pain around the hip joint.",
+                grade: 2,
+                rehab_steps: ["Rest", "Limited activity", "Physiotherapy"],
+                exercise_images: ["exercise_img1.jpg", "exercise_img2.jpg"],
+                diet_recommendation: "Balanced diet with carbs and protein"
+            },
+            {
+                injury_name: "Frozen Shoulder",
+                description: "Stiffness and pain in the shoulder joint due to immobility or injury.",
+                grade: 3,
+                rehab_steps: [],
+                exercise_images: [],
+                diet_recommendation: "Consult doctor"
+            }
+        ];
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const treatmentPlanElement = document.getElementById('treatmentPlan');
+            const errorElement = document.getElementById('error');
+            const debugElement = document.getElementById('debug');
+
+            const injuryDataString = localStorage.getItem('injury_data');
+            debugElement.textContent = `Data from localStorage: ${injuryDataString}`;
+            debugElement.style.display = 'block';
+
+            if (injuryDataString) {
+                try {
+                    const injuryData = JSON.parse(injuryDataString);
+                    console.log('Parsed injury data:', injuryData);
+                    displayTreatmentPlan(injuryData);
+                } catch (error) {
+                    console.error('Error parsing injury data:', error);
+                    errorElement.textContent = `Error parsing injury data: ${error.message}. Please try reporting the injury again.`;
+                    errorElement.style.display = 'block';
+                    treatmentPlanElement.style.display = 'none';
+                }
+            } else {
+                errorElement.textContent = 'No injury data found. Please report an injury first.';
+                errorElement.style.display = 'block';
+                treatmentPlanElement.style.display = 'none';
+            }
+        });
+
+        function displayTreatmentPlan(data) {
+            const treatmentPlanElement = document.getElementById('treatmentPlan');
+            if (!data.injury_name || !data.description) {
+                treatmentPlanElement.innerHTML = '<p>Error: Incomplete data received. Please report the injury again.</p>';
+                console.error('Incomplete data:', data);
+                return;
+            }
+
+            const injuryInfo = findInjuryInfo(data.injury_name);
+            if (!injuryInfo) {
+                treatmentPlanElement.innerHTML = '<p>Error: Injury not found in our database. Please consult a medical professional.</p>';
+                return;
+            }
+
+            let content = `
+                <h2>Treatment Plan for ${data.injury_name}</h2>
+                <div class="section">
+                    <h3>Injury Description:</h3>
+                    <p>${injuryInfo.description}</p>
+                </div>
+                <div class="section">
+                    <h3>Injury Classification:</h3>
+                    <p>Grade <span class="grade">${injuryInfo.grade}</span></p>
+                </div>
+            `;
+
+            if (injuryInfo.grade === 3) {
+                content += `
+                    <div class="section">
+                        <h3>Treatment Recommendation:</h3>
+                        <p>${injuryInfo.diet_recommendation}</p>
+                    </div>
+                `;
+            } else {
+                content += `
+                    <div class="section">
+                        <h3>Rehab Steps:</h3>
+                        <ol>
+                            ${injuryInfo.rehab_steps.map(step => `<li>${step}</li>`).join('')}
+                        </ol>
+                    </div>
+                    <div class="section">
+                        <h3>Exercise Images:</h3>
+                        ${injuryInfo.exercise_images.map(img => `<img src="${img}" alt="Rehab exercise for ${data.injury_name}">`).join('')}
+                    </div>
+                    <div class="section diet-section">
+                        <div>
+                            <h3>Diet Recommendation:</h3>
+                            <p>${injuryInfo.diet_recommendation}</p>
+                        </div>
+                        <button class="get-diet-plan-btn" onclick="getPersonalisedDietPlan('${data.injury_name}')">Get Personalised Diet Plan</button>
+                    </div>
+                `;
+            }
+
+            treatmentPlanElement.innerHTML = content;
+        }
+
+        function findInjuryInfo(injuryName) {
+            return injuryDataset.find(injury => injury.injury_name.toLowerCase() === injuryName.toLowerCase());
+        }
+
+        function getPersonalisedDietPlan(injuryName) {
+            // Redirect to personalised.html with the injury name as a query parameter
+            window.location.href = `personalised.html?injury=${encodeURIComponent(injuryName)}`;
+        }
+    </script>
+</body>
+</html>

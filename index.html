@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack - Landing Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> <!-- Link to the shared CSS file -->
+
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your Fitness Journey Starts Here</h1>
+            <p>Track, Log, and Achieve – All in One Place</p>
+            <a href="{{ url_for('login') }}" class="cta-btn">Get Started</a> <!-- Link to login page -->
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 FitTrack. All rights reserved.</p>
+            <p>Contact us: info@fittrack.com | +123 456 7890</p>
+            <div class="social-links">
+                <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Access</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premium.css') }}"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Get Premium Access</h1>
+        <p id="plan-description" class="description"></p> <!-- Dynamic plan description -->
+
+        <form id="payment-form" action="payment_gateway_url" method="POST">
+            <div class="payment-method">
+                <h2>Select Payment Method</h2>
+                <label>
+                    <input type="radio" name="payment-method" value="upi" checked onclick="showPaymentFields('upi')">
+                    UPI
+                </label>
+                <label>
+                    <input type="radio" name="payment-method" value="card" onclick="showPaymentFields('card')">
+                    Card
+                </label>
+            </div>
+
+            <!-- UPI Payment Fields -->
+            <div id="upi-fields" class="payment-fields">
+                <h3>UPI Payment</h3>
+                <input type="text" name="upi-id" placeholder="Enter UPI ID" required>
+            </div>
+
+            <!-- Card Payment Fields -->
+            <div id="card-fields" class="payment-fields" style="display:none;">
+                <h3>Card Payment</h3>
+                <select name="card-type" required>
+                    <option value="">Select Card Type</option>
+                    <option value="credit">Credit Card</option>
+                    <option value="debit">Debit Card</option>
+                </select>
+                <input type="text" name="card-number" placeholder="Card Number" required>
+                <input type="text" name="card-holder" placeholder="Card Holder Name" required>
+                <div class="expiry-cvv">
+                    <input type="text" name="expiry-date" placeholder="MM/YY" required>
+                    <input type="text" name="cvv" placeholder="CVV" required>
+                </div>
+            </div>
+
+            <h3>Your Details</h3>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="hidden" id="plan-input" name="plan" value="">
+            <input type="hidden" id="price-input" name="price" value="">
+            <input type="submit" value="Proceed to Payment" class="submit-btn">
+        </form>
+    </div>
+
+    <script>
+        function showPaymentFields(method) {
+            document.getElementById('upi-fields').style.display = method === 'upi' ? 'block' : 'none';
+            document.getElementById('card-fields').style.display = method === 'card' ? 'block' : 'none';
+        }
+
+        // Retrieve URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get('plan');
+        const price = urlParams.get('price');
+
+        // Update the page with plan information
+        document.getElementById('plan-description').textContent = `Unlock all premium diet and workout plans for just $${price} with the ${plan} plan!`;
+        
+        // Set the hidden inputs with plan and price values for form submission
+        document.getElementById('plan-input').value = plan;
+        document.getElementById('price-input').value = price;
+    </script>
+</body>
+</html>

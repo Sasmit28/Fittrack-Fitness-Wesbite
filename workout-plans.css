@@ -1,0 +1,80 @@
+/* General Body Styles */
+body {
+    background-color: #121212; /* Dark background color */
+    color: #ffffff; /* Light text color for contrast */
+    font-family: Arial, sans-serif; /* Font family */
+    margin: 0; /* Remove default margin */
+    padding: 20px; /* Add padding around the body */
+}
+
+/* Heading Styles */
+h1 {
+    font-size: 48px; /* Large font size for the main heading */
+    text-align: center; /* Center the heading */
+    color: #ff4c68; /* Accent color */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+h2 {
+    font-size: 36px; /* Font size for subheadings */
+    color: #ff4c68; /* Accent color */
+    margin-top: 40px; /* Space above the subheading */
+}
+
+/* Plans Container */
+.plans {
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow wrapping of cards */
+    justify-content: center; /* Center the cards */
+    gap: 20px; /* Space between cards */
+}
+
+/* Individual Plan Card */
+.plan {
+    background: #2e2e2e; /* Dark background for the cards */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the card */
+    width: calc(25% - 20px); /* Width of each card, four in a row */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    text-align: center; /* Center text inside cards */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.plan:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+/* Card Image */
+.plan img {
+    max-width: 100%; /* Responsive image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Rounded corners for the image */
+}
+
+/* Card Titles */
+.plan h3 {
+    font-size: 24px; /* Font size for the card titles */
+    color: #ffffff; /* White text color for titles */
+    margin: 15px 0; /* Space above and below titles */
+}
+
+/* Card Descriptions */
+.plan p {
+    font-size: 16px; /* Font size for card descriptions */
+    color: #dddddd; /* Slightly lighter text color */
+}
+
+/* Button Styles */
+.btn {
+    background-color: #ff4c68; /* Button background color */
+    color: #ffffff; /* Button text color */
+    padding: 10px 20px; /* Button padding */
+    text-decoration: none; /* Remove underline from link */
+    border-radius: 5px; /* Rounded corners for button */
+    display: inline-block; /* Inline-block for button */
+    margin-top: 15px; /* Space above the button */
+}
+
+.btn:hover {
+    background-color: #e84356; /* Darker shade on hover */
+}

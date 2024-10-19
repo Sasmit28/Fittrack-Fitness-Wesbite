@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Plans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/diet-plans.css') }}">
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #ff4c68;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            color: #ff4c68;
+        }
+
+        .plans {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .plan {
+            background: #2e2e2e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .plan:hover {
+            transform: translateY(-5px);
+        }
+
+        .plan img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff4c68;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #e03e5e;
+        }
+
+        @media (max-width: 768px) {
+            .plans {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .plans {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Diet Plans</h1>
+
+    <h2>Free Plans</h2>
+    <div class="plans">
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/free-plan1.jpg') }}" alt="Free Plan 1">
+            <h3>Basic Diet Plan</h3>
+            <p>Details of the free diet plan including meal suggestions and tips for a healthy diet.</p>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/free-plan2.jpg') }}" alt="Free Plan 2">
+            <h3>Vegetarian Diet Plan</h3>
+            <p>A balanced vegetarian diet plan focusing on whole foods and nutritious meals.</p>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/free-plan3.jpg') }}" alt="Free Plan 3">
+            <h3>Keto Diet Plan</h3>
+            <p>A simple keto diet plan to help you transition to a low-carb lifestyle.</p>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/free-plan4.jpg') }}" alt="Free Plan 4">
+            <h3>Detox Diet Plan</h3>
+            <p>A detox plan designed to cleanse your body with healthy smoothies and meals.</p>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/free-plan5.jpg') }}" alt="Free Plan 5">
+            <h3>Paleo Diet Plan</h3>
+            <p>Follow the Paleo diet with this easy-to-follow plan featuring natural foods.</p>
+        </div>
+    </div>
+
+    <h2>Paid Plans</h2>
+    <div class="plans">
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/paid-plan1.jpg') }}" alt="Paid Plan 1">
+            <h3>Advanced Diet Plan</h3>
+            <p>Comprehensive diet plan with personalized meal options and coaching.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/paid-plan2.jpg') }}" alt="Paid Plan 2">
+            <h3>Weight Loss Program</h3>
+            <p>A structured program to help you lose weight effectively with meal plans and workouts.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/paid-plan3.jpg') }}" alt="Paid Plan 3">
+            <h3>Muscle Gain Plan</h3>
+            <p>A diet plan designed for muscle gain, including high-protein meal options.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/paid-plan4.jpg') }}" alt="Paid Plan 4">
+            <h3>Low-FODMAP Diet Plan</h3>
+            <p>Specialized plan for those with IBS, focusing on low-FODMAP foods.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+        <div class="plan">
+            <img src="{{ url_for('static', filename='images/paid-plan5.jpg') }}" alt="Paid Plan 5">
+            <h3>Heart Health Plan</h3>
+            <p>A heart-healthy diet plan designed to improve cardiovascular health.</p>
+            <a href="{{ url_for('premium') }}" class="btn">Get Premium</a>
+        </div>
+    </div>
+</body>
+</html>

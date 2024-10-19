@@ -1,0 +1,79 @@
+/* Base styles for the body */
+body {
+    background-color: #121212; /* Dark background for the whole page */
+    color: #ffffff; /* White text color for contrast */
+    font-family: Arial, sans-serif; /* Font style */
+    margin: 0; /* Remove default margin */
+    padding: 20px; /* Padding around the page */
+}
+
+/* Header styles */
+h1 {
+    text-align: center; /* Center the main title */
+    margin: 20px 0; /* Margin for spacing */
+    color: #ff4c68; /* Accent color for the heading */
+}
+
+h2 {
+    text-align: center; /* Center the section titles */
+    margin: 20px 0; /* Margin for spacing */
+    color: #ff4c68; /* Accent color for section headings */
+}
+
+/* Grid layout for plans */
+.plans {
+    display: grid; /* Use CSS Grid for layout */
+    grid-template-columns: repeat(4, 1fr); /* Four cards in a row */
+    gap: 20px; /* Space between the cards */
+    padding: 20px; /* Padding around the grid */
+}
+
+/* Card styles */
+.plan {
+    background: #2e2e2e; /* Darker background for the cards */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside cards */
+    text-align: center; /* Center text inside cards */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.plan:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+/* Image styles */
+.plan img {
+    max-width: 100%; /* Responsive images */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Rounded corners for images */
+}
+
+/* Button styles */
+.btn {
+    display: inline-block; /* Button display */
+    margin-top: 10px; /* Margin for spacing */
+    padding: 10px 20px; /* Padding for the button */
+    background-color: #ff4c68; /* Button background color */
+    color: white; /* Button text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners for the button */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.btn:hover {
+    background-color: #e03e5e; /* Darker shade on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .plans {
+        grid-template-columns: repeat(2, 1fr); /* Two cards in a row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .plans {
+        grid-template-columns: 1fr; /* One card in a row on very small screens */
+    }
+}

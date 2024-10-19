@@ -1,0 +1,45 @@
+/* Additional Styles for Plans Page */
+body {
+    background-color: #121212; /* Dark background for the whole body */
+}
+
+.container {
+    background-color: #1e1e1e; /* Dark background for the container */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: calc(100vh - 100px); /* Full height minus margins for header/footer */
+    padding: 20px;
+    border-radius: 8px; /* Optional: Add rounded corners to the container */
+}
+
+h1 {
+    font-size: 48px; /* Large font size for the heading */
+    margin-bottom: 30px; /* Space below the heading */
+    color: #ff4c68; /* Accent color for the heading */
+    text-align: center; /* Center text */
+}
+
+.plan-options {
+    display: flex; /* Use flexbox for the plan cards */
+    gap: 40px; /* Space between the cards */
+}
+
+.card {
+    background: #2e2e2e; /* Darker background for the cards */
+    border-radius: 8px;
+    padding: 40px; /* Larger padding for bigger card size */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Slightly larger shadow for depth */
+    text-align: center; /* Center text inside cards */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.card h2 {
+    font-size: 36px; /* Larger font size for card titles */
+    color: #ffffff; /* White text color */
+}
